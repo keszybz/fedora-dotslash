@@ -1,0 +1,37 @@
+--- dotslash-0.5.7/Cargo.toml	1970-01-01T00:00:01+00:00
++++ dotslash-0.5.7/Cargo.toml	2026-06-26T10:40:35.435164+00:00
+@@ -161,29 +161,6 @@
+     "zerocopy",
+ ]
+ 
+-[target.'cfg(target_os = "macos")'.dependencies.nix]
+-version = "0.30.1"
+-features = [
+-    "dir",
+-    "event",
+-    "hostname",
+-    "inotify",
+-    "ioctl",
+-    "mman",
+-    "mount",
+-    "net",
+-    "poll",
+-    "ptrace",
+-    "reboot",
+-    "resource",
+-    "sched",
+-    "signal",
+-    "term",
+-    "time",
+-    "user",
+-    "zerocopy",
+-]
+-
+ [lints.clippy.allow_attributes]
+ level = "warn"
+ priority = -1
+@@ -296,3 +273,4 @@
+ lto = true
+ codegen-units = 1
+ strip = true
++

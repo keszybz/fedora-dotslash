@@ -1,0 +1,54 @@
+From b77c99e782889e4895b1fc95b177bfcd6cd694b4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@amutable.com>
+Date: Mon, 29 Jun 2026 14:34:19 +0200
+Subject: [PATCH] Cargo.toml: bump blake3 dependency to 1.8.5
+
+blake3 1.8.5 dropped the LowerHex impl on Hash, so switch the three
+blake3 digest sites from format!("{:x}", ...) to .to_hex().to_string().
+The features are also unused, so drop them from Cargo.toml.
+---
+ Cargo.toml                 | 2 +-
+ src/download.rs            | 2 +-
+ src/print_entry_for_url.rs | 2 +-
+ src/subcommand.rs          | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/download.rs b/src/download.rs
+index 5362f6b715..9574bc8852 100644
+--- a/src/download.rs
++++ b/src/download.rs
+@@ -224,7 +224,7 @@ fn verify_artifact(
+         HashAlgorithm::Blake3 => {
+             let mut hasher = blake3::Hasher::new();
+             io::copy(&mut file, &mut hasher).map(|size_in_bytes| {
+-                let digest = format!("{:x}", hasher.finalize());
++                let digest = hasher.finalize().to_hex().to_string();
+                 (size_in_bytes, digest)
+             })
+         }
+diff --git a/src/print_entry_for_url.rs b/src/print_entry_for_url.rs
+index 1b5394c49b..b28dcce21d 100644
+--- a/src/print_entry_for_url.rs
++++ b/src/print_entry_for_url.rs
+@@ -47,7 +47,7 @@ pub fn print_entry_for_url(url: &OsStr) -> anyhow::Result<()> {
+     let mut file = File::open(tempfile.path())?;
+     let mut hasher = blake3::Hasher::new();
+     let size = io::copy(&mut file, &mut hasher)?;
+-    let hex_digest = format!("{:x}", hasher.finalize());
++    let hex_digest = hasher.finalize().to_hex().to_string();
+ 
+     let entry_json = serialize_entry(url, size, hex_digest)?;
+     println!("{}", entry_json);
+diff --git a/src/subcommand.rs b/src/subcommand.rs
+index e3348d1b1a..f7516aedbd 100644
+--- a/src/subcommand.rs
++++ b/src/subcommand.rs
+@@ -135,7 +135,7 @@ fn run_subcommand_impl(subcommand: &Subcommand, args: &mut ArgsOs) -> anyhow::Re
+             let mut file = fs_ctx::file_open(file_arg)?;
+             let mut hasher = blake3::Hasher::new();
+             io::copy(&mut file, &mut hasher)?;
+-            let hex_digest = format!("{:x}", hasher.finalize());
++            let hex_digest = hasher.finalize().to_hex().to_string();
+             println!("{}", hex_digest);
+         }
+ 

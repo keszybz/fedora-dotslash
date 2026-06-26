@@ -1,0 +1,26 @@
+From 9c92ce3be41b1c5551f83d7d52b6df94e5dc2946 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@amutable.com>
+Date: Mon, 29 Jun 2026 14:04:23 +0200
+Subject: [PATCH] config.rs: update to jsonc-parser 0.32
+
+parse_to_serde_value is now generic over the deserialize target and
+returns T directly. Use Option<serde_json::Value> so empty input
+deserializes to None and the existing with_context() still applies.
+---
+ Cargo.toml    | 2 +-
+ src/config.rs | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/config.rs b/src/config.rs
+index cbb0ed4c2b..512906b481 100644
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -136,7 +136,7 @@ pub fn parse_file(data: &str) -> anyhow::Result<(Value, ConfigFile)> {
+             anyhow::format_err!("DotSlash file must start with `{REQUIRED_HEADER}`")
+         })?;
+ 
+-    let value = jsonc_parser::parse_to_serde_value(data, &Default::default())?
++    let value = jsonc_parser::parse_to_serde_value::<Option<serde_json::Value>>(data, &Default::default())?
+         .with_context(|| anyhow::format_err!("Failed to parse JSON"))?;
+     let config_file = ConfigFile::deserialize(&value).map_err(|err| {
+         if value.get("oncall").is_some() {
