@@ -25,6 +25,8 @@ Patch:          0001-Cargo.toml-bump-blake3-dependency-to-1.8.5.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 
+ExcludeArch:    %{ix86}
+
 %global _description %{expand:
 Command-line tool to facilitate fetching an executable, caching it, and
 then running it.}
