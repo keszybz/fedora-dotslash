@@ -24,6 +24,7 @@ Patch:          0001-config.rs-update-to-jsonc-parser-0.32.patch
 Patch:          0001-Cargo.toml-bump-blake3-dependency-to-1.8.5.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  xz-static
 
 ExcludeArch:    %{ix86}
 
@@ -38,6 +39,9 @@ Summary:        %{summary}
 # FIXME: paste output of %%cargo_license_summary here
 License:        # FIXME
 # LICENSE.dependencies contains a full license breakdown
+
+# We link to the static xz so that the binary is very easy to install.
+Provides:    bundled(xz-static) = %(rpm -q --qf='[%%{version}-%%{release}]' xz-static)
 
 %description -n %{crate} %{_description}
 
@@ -56,15 +60,19 @@ License:        # FIXME
 %cargo_generate_buildrequires
 
 %build
+export LZMA_LIB_DIR=%{_libdir}
 %cargo_build
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
 
 %install
+export LZMA_LIB_DIR=%{_libdir}
 %cargo_install
 
 %if %{with check}
 %check
+export LZMA_LIB_DIR=%{_libdir}
+
 # Many tests fail in mock with: curl: (6) Could not resolve host: github.com
 %cargo_test -- -- --skip={create_url_entry_tar_zst,fetch_simple,http__arg0,http__tar_xz__valid_executable,http__zst__valid_executable,create_url_entry_tar_gz,http__plain__valid_executable,clean_command_ok,http__xz__valid_executable,http__tar_zst__valid_executable,http__zip__valid_executable,http__gz__valid_executable,http__tar_gz__valid_executable,http__nonexistent_url}
 %endif
