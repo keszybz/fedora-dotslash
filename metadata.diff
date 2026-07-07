@@ -1,0 +1,67 @@
+--- dotslash-0.5.9/Cargo.toml~	2026-06-26 14:21:22.485968157 +0200
++++ dotslash-0.5.9/Cargo.toml	2026-06-26 14:27:42.698718087 +0200
+@@ -50,15 +50,10 @@
+ version = "1.0.98"
+ 
+ [dependencies.blake3]
+-version = "=1.8.2"
+-features = [
+-    "mmap",
+-    "rayon",
+-    "traits-preview",
+-]
++version = "1.8.5"
+ 
+ [dependencies.bzip2]
+-version = "0.5"
++version = "0.6"
+ 
+ [dependencies.digest]
+ version = "0.10"
+@@ -82,14 +77,13 @@
+ version = "0.4"
+ 
+ [dependencies.jsonc-parser]
+-version = "0.26"
++version = "0.32"
+ features = ["serde"]
+ 
+ [dependencies.liblzma]
+ version = "0.4.4"
+ features = [
+     "parallel",
+-    "static",
+ ]
+ 
+ [dependencies.rand]
+@@ -119,7 +113,7 @@
+ version = "2.0.18"
+ 
+ [dependencies.zip]
+-version = "3.0.0"
++version = "8.0.0"
+ features = ["deflate"]
+ default-features = false
+ 
+@@ -136,20 +130,13 @@
+ [dev-dependencies.assert_matches]
+ version = "1.5"
+ 
+-[dev-dependencies.buck-resources]
+-version = "1"
+-
+ [dev-dependencies.bzip2]
+-version = "0.5.2"
+-
+-[dev-dependencies.criterion]
+-version = "0.5.1"
++version = "0.6"
+ 
+ [dev-dependencies.liblzma]
+ version = "0.4.6"
+ features = [
+     "parallel",
+-    "static",
+ ]
+ 
+ [dev-dependencies.snapbox]
